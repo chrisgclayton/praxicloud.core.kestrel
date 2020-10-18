@@ -1,0 +1,1086 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>praxicloud.core.kestrel</name>
+    </assembly>
+    <members>
+        <member name="T:praxicloud.core.kestrel.IKestrelHost">
+            <summary>
+            Interface that represents a Kestrel host
+            </summary>
+        </member>
+        <member name="T:praxicloud.core.kestrel.IKestrelStartup">
+            <summary>
+            A Kestrel startup implementation definition
+            </summary>
+        </member>
+        <member name="M:praxicloud.core.kestrel.IKestrelStartup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IHostingEnvironment)">
+            <summary>
+            Called by the Kestrel runtime to configure the pipeline
+            </summary>
+            <param name="app">Application Builder</param>
+            <param name="env">Hosting Environment</param>
+        </member>
+        <member name="T:praxicloud.core.kestrel.IProbeStartup">
+            <summary>
+            A startup type for kestrel that is specific for probes
+            </summary>
+        </member>
+        <member name="T:praxicloud.core.kestrel.KestrelAvailabilityProbe">
+            <summary>
+            An availability probe based on Kestrel for HTTP
+            </summary>
+        </member>
+        <member name="M:praxicloud.core.kestrel.KestrelAvailabilityProbe.#ctor(praxicloud.core.kestrel.probes.IKestrelHostConfiguration,Microsoft.Extensions.Logging.ILoggerFactory,praxicloud.core.containers.IAvailabilityCheck)">
+            <summary>
+            Initializes a new instance of the type
+            </summary>
+            <param name="configuration">The kestrel host configuration</param>
+            <param name="loggerFactory">A factory that can be used to create loggers</param>
+            <param name="availabilityCheck">The logic to validate success results</param>
+        </member>
+        <member name="T:praxicloud.core.kestrel.KestrelDualProbe">
+            <summary>
+            A Kestrel based probe that handles both availability and health probes
+            </summary>
+        </member>
+        <member name="M:praxicloud.core.kestrel.KestrelDualProbe.#ctor(praxicloud.core.kestrel.probes.IKestrelHostConfiguration,Microsoft.Extensions.Logging.ILoggerFactory,praxicloud.core.containers.IAvailabilityCheck,praxicloud.core.containers.IHealthCheck)">
+            <summary>
+            Initializes an instance of the type
+            </summary>
+            <param name="configuration">The kestrel host configuration</param>
+            <param name="loggerFactory">A factory that can be used to create loggers</param>
+            <param name="availabilityCheck">Logic that determines if the availability probe should return success</param>
+            <param name="healthCheck">Logic that determines if the health probe should return success</param>
+        </member>
+        <member name="T:praxicloud.core.kestrel.KestrelHealthProbe">
+            <summary>
+            A health probe taht uses kestrel for HTTP
+            </summary>
+        </member>
+        <member name="M:praxicloud.core.kestrel.KestrelHealthProbe.#ctor(praxicloud.core.kestrel.probes.IKestrelHostConfiguration,Microsoft.Extensions.Logging.ILoggerFactory,praxicloud.core.containers.IHealthCheck)">
+            <summary>
+            Initializes a new instance of the type
+            </summary>
+            <param name="configuration">Kestrel host configuration</param>
+            <param name="loggerFactory">A factory that can be used to create loggers</param>
+            <param name="healthCheck">Logic that determines if the service is considered healthy</param>
+        </member>
+        <member name="T:praxicloud.core.kestrel.KestrelHost`1">
+            <summary>
+            A basic kestrel host
+            </summary>
+            <typeparam name="T">The startup type</typeparam>
+        </member>
+        <member name="T:praxicloud.core.kestrel.KestrelHost`1.StartupFactory">
+            <summary>
+            A factory instance
+            </summary>
+            <returns>Creats the startup type</returns>
+        </member>
+        <member name="F:praxicloud.core.kestrel.KestrelHost`1._factory">
+            <summary>
+            The factory used to create the startup instance
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.KestrelHost`1._logger">
+            <summary>
+            A logger for writing debugging and diagnostics information to
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.KestrelHost`1._completionSource">
+            <summary>
+            A completion source that is completed when the server terminates
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.KestrelHost`1._configuration">
+            <summary>
+            The kestrel startup 
+            </summary>
+        </member>
+        <member name="M:praxicloud.core.kestrel.KestrelHost`1.#ctor(praxicloud.core.kestrel.probes.IKestrelHostConfiguration,Microsoft.Extensions.Logging.ILoggerFactory,praxicloud.core.kestrel.KestrelHost{`0}.StartupFactory)">
+            <summary>
+            Initializes a new instance of the type
+            </summary>
+            <param name="configuration">The configuration for the Kestrel Server</param>
+            <param name="loggerFactory">A factory to create loggers from</param>
+            <param name="factory">An optional factory for the startup type</param>
+        </member>
+        <member name="F:praxicloud.core.kestrel.KestrelHost`1._control">
+            <summary>
+            A control used manage access to the lifecycle events
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.KestrelHost`1._host">
+            <summary>
+            The web host to operate on
+            </summary>
+        </member>
+        <member name="P:praxicloud.core.kestrel.KestrelHost`1.Task">
+            <inheritdoc />
+        </member>
+        <member name="M:praxicloud.core.kestrel.KestrelHost`1.StartAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:praxicloud.core.kestrel.KestrelHost`1.StopAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:praxicloud.core.kestrel.KestrelHost`1.ConfigureLogging(Microsoft.Extensions.Logging.ILoggingBuilder)">
+            <summary>
+            Can be overridden to configure extra logging options
+            </summary>
+            <param name="logBuilder">A log builder</param>
+        </member>
+        <member name="M:praxicloud.core.kestrel.KestrelHost`1.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Overridden to configure dependency injection for the Kestrel instance
+            </summary>
+            <param name="serviceCollection">The service collection to add instances to</param>
+        </member>
+        <member name="M:praxicloud.core.kestrel.KestrelHost`1.ConfigureKestrelListenOptions(Microsoft.AspNetCore.Server.Kestrel.Core.ListenOptions)">
+            <summary>
+            A method that can be overridden to configure the listening options of the Kestrel server
+            </summary>
+            <param name="options">The options instance that can be configured</param>
+        </member>
+        <member name="M:praxicloud.core.kestrel.KestrelHost`1.GetHostBuilder">
+            <summary>
+            Creates and configures the host
+            </summary>
+            <returns>A web host builder</returns>
+        </member>
+        <member name="T:praxicloud.core.kestrel.KestrelProbeHost`1">
+            <summary>
+            The Kestrel host that implements a container probe interface
+            </summary>
+        </member>
+        <member name="M:praxicloud.core.kestrel.KestrelProbeHost`1.#ctor(praxicloud.core.kestrel.probes.IKestrelHostConfiguration,Microsoft.Extensions.Logging.ILoggerFactory,praxicloud.core.kestrel.KestrelHost{`0}.StartupFactory)">
+            <summary>
+            Initializes a new instance of the type
+            </summary>
+            <param name="configuration">The configuration for the Kestrel Server</param>
+            <param name="loggerFactory">A factory to create loggers from</param>
+            <param name="factory">An optional factory for the startup type</param>
+        </member>
+        <member name="T:praxicloud.core.kestrel.middleware.authentication.AuthenticationRequestPayload">
+            <summary>
+            An authorization request payload
+            </summary>
+        </member>
+        <member name="P:praxicloud.core.kestrel.middleware.authentication.AuthenticationRequestPayload.Meta">
+            <summary>
+            Metadata associatd with the request
+            </summary>
+        </member>
+        <member name="P:praxicloud.core.kestrel.middleware.authentication.AuthenticationRequestPayload.GrantType">
+            <summary>
+            The type of access grant requested
+            </summary>
+        </member>
+        <member name="P:praxicloud.core.kestrel.middleware.authentication.AuthenticationRequestPayload.UserName">
+            <summary>
+            The user name
+            </summary>
+        </member>
+        <member name="P:praxicloud.core.kestrel.middleware.authentication.AuthenticationRequestPayload.Password">
+            <summary>
+            The password
+            </summary>
+        </member>
+        <member name="T:praxicloud.core.kestrel.middleware.authentication.AuthenticationResponsePayload">
+            <summary>
+            A response object from authentication requests
+            </summary>
+        </member>
+        <member name="P:praxicloud.core.kestrel.middleware.authentication.AuthenticationResponsePayload.AccessToken">
+            <summary>
+            The access token
+            </summary>
+        </member>
+        <member name="P:praxicloud.core.kestrel.middleware.authentication.AuthenticationResponsePayload.TokenType">
+            <summary>
+            The type of access token
+            </summary>
+        </member>
+        <member name="T:praxicloud.core.kestrel.middleware.authentication.IAuthenticationMiddleware">
+            <summary>
+            A middleware component used to authenticate requests in the Kestrel pipeline
+            </summary>
+        </member>
+        <member name="M:praxicloud.core.kestrel.middleware.authentication.IAuthenticationMiddleware.Invoke(Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            Processes the HTTP requests
+            </summary>
+            <param name="context">The HTTP Context associated with the request</param>
+        </member>
+        <member name="T:praxicloud.core.kestrel.middleware.authentication.SasAuthenticationMiddleware">
+            <summary>
+            A middleware component that does basic SAS validation
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.middleware.authentication.SasAuthenticationMiddleware.ContentType">
+            <summary>
+            The response content type
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.middleware.authentication.SasAuthenticationMiddleware.SuccessResponse">
+            <summary>
+            Success payload for availability and health probes
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.middleware.authentication.SasAuthenticationMiddleware.FailureResponse">
+            <summary>
+            Failure payload for availability and health probes
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.middleware.authentication.SasAuthenticationMiddleware._next">
+            <summary>
+            The next module to call
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.middleware.authentication.SasAuthenticationMiddleware._authenticationTiming">
+            <summary>
+            A summary metric to record authentication timing
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.middleware.authentication.SasAuthenticationMiddleware._configuration">
+            <summary>
+            Web socket configuration
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.middleware.authentication.SasAuthenticationMiddleware._webSocketConfiguration">
+            <summary>
+            The configuration values for the web socket operations
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.middleware.authentication.SasAuthenticationMiddleware._logger">
+            <summary>
+            The logger to write debugging and diagnostics information to
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.middleware.authentication.SasAuthenticationMiddleware._authenticationSuccess">
+            <summary>
+            A metric used to track successful authentication rate
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.middleware.authentication.SasAuthenticationMiddleware._authenticationFailure">
+            <summary>
+            A metric used to track unsuccessful authentication rate
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.middleware.authentication.SasAuthenticationMiddleware._validateSuccess">
+            <summary>
+            A metric used to track successf validation rate
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.middleware.authentication.SasAuthenticationMiddleware._validateFailure">
+            <summary>
+            A metric used to track unsuccessful validation rate
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.middleware.authentication.SasAuthenticationMiddleware._sasTokenTimeout">
+            <summary>
+            The timeout for each SAS token
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.middleware.authentication.SasAuthenticationMiddleware._sasTokenPolicyName">
+            <summary>
+            The name of the policy that was used to generate the SAS
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.middleware.authentication.SasAuthenticationMiddleware._sasTokenScheme">
+            <summary>
+            The scheme that the SAS token uses
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.middleware.authentication.SasAuthenticationMiddleware._sasSigningKey">
+            <summary>
+            The key used to sign the SAS tokens
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.middleware.authentication.SasAuthenticationMiddleware._authorizationHeaderName">
+            <summary>
+            The HTTP header that contains the authorization details
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.middleware.authentication.SasAuthenticationMiddleware._resourceUriHeaderName">
+            <summary>
+            The HTTP header that contains the resource URI information
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.middleware.authentication.SasAuthenticationMiddleware._authorizationPolicyHeaderName">
+            <summary>
+            The HTTP header that contains the policy header
+            </summary>
+        </member>
+        <member name="M:praxicloud.core.kestrel.middleware.authentication.SasAuthenticationMiddleware.#ctor(Microsoft.AspNetCore.Http.RequestDelegate,praxicloud.core.configuration.IDependencyService,praxicloud.core.metrics.IMetricFactory,Microsoft.Extensions.Logging.ILoggerFactory,praxicloud.core.kestrel.middleware.websockets.IWebSocketConfiguration,System.Nullable{System.TimeSpan},System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the type
+            </summary>
+            <param name="authenticationPath">The HTTP path used for authentication</param>
+            <param name="authorizationHeaderName">The name of the header where the authorization token is stored</param>
+            <param name="authorizationPolicyHeaderName">The name of the header where the policy is stored</param>
+            <param name="dependencyService">A service that can be used to retrieve dependencies that were injected</param>
+            <param name="loggerFactory">A factory that can be used to create loggers</param>
+            <param name="metricFactory">A factory that can be used to create metrics</param>
+            <param name="policyName">The name of the policy</param>
+            <param name="resourceUriHeaderName">The name of the header that stores the resource URL</param>
+            <param name="sasSigningKey">A Shared Access Signature signing key</param>
+            <param name="sasTokenPolicyName">A Shared Access Signature token policy name</param>
+            <param name="sasTokenTimeout">The Shared Access Signature token timeout</param>
+            <param name="webSocketConfiguration">The configuration of the web socket</param>   
+            <param name="next">The next middleware component to execute</param>
+        </member>
+        <member name="M:praxicloud.core.kestrel.middleware.authentication.SasAuthenticationMiddleware.ValidateTokenAsync(Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            Validates a token that has already been granted
+            </summary>
+            <param name="context">The HTTP Context that generated the request</param>
+        </member>
+        <member name="M:praxicloud.core.kestrel.middleware.authentication.SasAuthenticationMiddleware.ValidateAuthenticationRequestAsync(Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            Validates the authentication request
+            </summary>
+            <param name="context">The HTTP Context that generated the request</param>
+        </member>
+        <member name="M:praxicloud.core.kestrel.middleware.authentication.SasAuthenticationMiddleware.Invoke(Microsoft.AspNetCore.Http.HttpContext)">
+            <inheritdoc />
+        </member>
+        <member name="M:praxicloud.core.kestrel.middleware.authentication.SasAuthenticationMiddleware.AuthenticateClientAsync(Microsoft.AspNetCore.Http.HttpRequest,System.Threading.CancellationToken)">
+            <summary>
+            Authenticates the client credentials against the hub
+            </summary>
+            <param name="request">The request</param>
+            <param name="cancellationToken">A token to monitor for abort requests</param>
+            <returns>The authentication response</returns>
+        </member>
+        <member name="M:praxicloud.core.kestrel.middleware.authentication.SasAuthenticationMiddleware.AuthenticateAsync(Microsoft.AspNetCore.Http.HttpRequest,praxicloud.core.kestrel.middleware.authentication.AuthenticationRequestPayload,System.Threading.CancellationToken)">
+            <summary>
+            Performs authentication of the client
+            </summary>
+            <param name="request">The HTTP Request</param>
+            <param name="requestPayload">Payload of the HTTP request</param>
+            <param name="cancellationToken">A token that can be used to monitor for abort requests</param>
+            <returns>True if authentication is successful</returns>
+        </member>
+        <member name="T:praxicloud.core.kestrel.middleware.unhandled.IUnhandledConfiguration">
+            <summary>
+            A configuration objec that describes the behavior of the unhandled middleware component
+            </summary>
+        </member>
+        <member name="P:praxicloud.core.kestrel.middleware.unhandled.IUnhandledConfiguration.ContentType">
+            <summary>
+            The response content type
+            </summary>
+        </member>
+        <member name="P:praxicloud.core.kestrel.middleware.unhandled.IUnhandledConfiguration.Response">
+            <summary>
+            The response content
+            </summary>
+        </member>
+        <member name="P:praxicloud.core.kestrel.middleware.unhandled.IUnhandledConfiguration.ResponseCode">
+            <summary>
+            HTTP Response code
+            </summary>
+        </member>
+        <member name="T:praxicloud.core.kestrel.middleware.unhandled.IUnhandledMiddleware">
+            <summary>
+            A middleware component used when no other pipeline middleware handlers have completed
+            </summary>
+        </member>
+        <member name="M:praxicloud.core.kestrel.middleware.unhandled.IUnhandledMiddleware.Invoke(Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            Processes the HTTP requests
+            </summary>
+            <param name="context">The HTTP Context associated with the request</param>
+        </member>
+        <member name="T:praxicloud.core.kestrel.middleware.unhandled.UnhandledConfiguration">
+            <summary>
+            A configuration objec that describes the behavior of the unhandled middleware component
+            </summary>
+        </member>
+        <member name="P:praxicloud.core.kestrel.middleware.unhandled.UnhandledConfiguration.ContentType">
+            <inheritdoc />
+        </member>
+        <member name="P:praxicloud.core.kestrel.middleware.unhandled.UnhandledConfiguration.Response">
+            <inheritdoc />
+        </member>
+        <member name="P:praxicloud.core.kestrel.middleware.unhandled.UnhandledConfiguration.ResponseCode">
+            <inheritdoc />
+        </member>
+        <member name="T:praxicloud.core.kestrel.middleware.unhandled.UnhandledDefaults">
+            <summary>
+            Default values for the unhandled request middleware
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.middleware.unhandled.UnhandledDefaults.ContentType">
+            <summary>
+            The response content type
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.middleware.unhandled.UnhandledDefaults.Response">
+            <summary>
+            Payload for unhandled responses
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.middleware.unhandled.UnhandledDefaults.ResponseCode">
+            <summary>
+            Http Bad request code
+            </summary>
+        </member>
+        <member name="T:praxicloud.core.kestrel.middleware.unhandled.UnhandledMiddleware">
+            <summary>
+            A middleware component that responds once no other pipeline component has completed
+            </summary>
+        </member>
+        <member name="T:praxicloud.core.kestrel.middleware.unhandled.UnhandledMiddleware.InvocationCallback">
+            <summary>
+            The signature of a method invoked when the middleware is invoked
+            </summary>
+            <param name="context">The HTTP Context</param>
+            <returns>True if it is considered handled</returns>
+        </member>
+        <member name="F:praxicloud.core.kestrel.middleware.unhandled.UnhandledMiddleware._next">
+            <summary>
+            The next module to call
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.middleware.unhandled.UnhandledMiddleware._logger">
+            <summary>
+            The logger to write debugging and diagnostics information to
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.middleware.unhandled.UnhandledMiddleware._contentType">
+            <summary>
+            The content type of the response
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.middleware.unhandled.UnhandledMiddleware._content">
+            <summary>
+            The content to be written in the response
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.middleware.unhandled.UnhandledMiddleware._responseCode">
+            <summary>
+            The response code
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.middleware.unhandled.UnhandledMiddleware._invocationCallback">
+            <summary>
+            A method invoked when the middleware is invoked
+            </summary>
+        </member>
+        <member name="M:praxicloud.core.kestrel.middleware.unhandled.UnhandledMiddleware.#ctor(Microsoft.AspNetCore.Http.RequestDelegate,Microsoft.Extensions.Logging.ILoggerFactory,praxicloud.core.kestrel.middleware.unhandled.IUnhandledConfiguration,praxicloud.core.kestrel.middleware.unhandled.UnhandledMiddleware.InvocationCallback)">
+            <summary>
+            Initializes a new instance of the type
+            </summary>
+            <param name="next">The next middleware component to execute</param>
+            <param name="loggerFactory">A factory that loggers can be created from</param>
+            <param name="unhandledConfiguration">Contains information about the response the handler returns</param>
+            <param name="invocationCallback">A method invoked when the middleware is invoked</param>
+        </member>
+        <member name="M:praxicloud.core.kestrel.middleware.unhandled.UnhandledMiddleware.Invoke(Microsoft.AspNetCore.Http.HttpContext)">
+            <inheritdoc />
+        </member>
+        <member name="T:praxicloud.core.kestrel.middleware.unhandled.UnhandledMiddlewareExtensions">
+            <summary>
+            An extension class used to make use of the Web Socket Middleware component easier
+            </summary>
+        </member>
+        <member name="M:praxicloud.core.kestrel.middleware.unhandled.UnhandledMiddlewareExtensions.UseUnhandled(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.Extensions.Logging.ILoggerFactory,praxicloud.core.kestrel.middleware.unhandled.IUnhandledConfiguration,praxicloud.core.kestrel.middleware.unhandled.UnhandledMiddleware.InvocationCallback)">
+            <summary>
+            Adds unhandled request middleware to the applicaiton builder
+            </summary>
+            <param name="app">The application builder to add the middleware to</param>
+            <param name="loggerFactory">A factory that loggers can be created from</param>
+            <param name="unhandledConfiguration">Contains information about the response the handler returns</param>
+            <param name="invocationCallback">A method invoked when the middleware is invoked</param>
+            <returns>The original application builder for pipelining</returns>
+        </member>
+        <member name="T:praxicloud.core.kestrel.middleware.websockets.IWebSocketConfiguration">
+            <summary>
+            Configuration for the web socket host
+            </summary>
+        </member>
+        <member name="P:praxicloud.core.kestrel.middleware.websockets.IWebSocketConfiguration.KeepAliveInterval">
+            <summary>
+            The interval that the keep alive ping pong should be sent
+            </summary>
+        </member>
+        <member name="P:praxicloud.core.kestrel.middleware.websockets.IWebSocketConfiguration.ReceiveBufferSize">
+            <summary>
+            The size of the receive buffer in bytes
+            </summary>
+        </member>
+        <member name="P:praxicloud.core.kestrel.middleware.websockets.IWebSocketConfiguration.AllowedOrigins">
+            <summary>
+            A list of origins that are allowed or null for all
+            </summary>
+        </member>
+        <member name="P:praxicloud.core.kestrel.middleware.websockets.IWebSocketConfiguration.WebSocketPath">
+            <summary>
+            The path starting with / that hosts web sockets
+            </summary>
+        </member>
+        <member name="P:praxicloud.core.kestrel.middleware.websockets.IWebSocketConfiguration.SessionTimeout">
+            <summary>
+            The maximum time a session can remain idle before disconnecting
+            </summary>
+        </member>
+        <member name="T:praxicloud.core.kestrel.middleware.websockets.IWebSocketHandler">
+            <summary>
+            A web socket session handler
+            </summary>
+        </member>
+        <member name="M:praxicloud.core.kestrel.middleware.websockets.IWebSocketHandler.ProcessAsync(System.Net.WebSockets.WebSocket,System.Threading.CancellationToken)">
+            <summary>
+            Processes the web socket session
+            </summary>
+            <param name="socket">The web socket that is in use</param>
+            <param name="cancellationToken">A token to monitor for abort requests</param>
+        </member>
+        <member name="T:praxicloud.core.kestrel.middleware.websockets.WebSocketConfiguration">
+            <summary>
+            Configuration for the web socket host
+            </summary>
+        </member>
+        <member name="P:praxicloud.core.kestrel.middleware.websockets.WebSocketConfiguration.KeepAliveInterval">
+            <inheritdoc />
+        </member>
+        <member name="P:praxicloud.core.kestrel.middleware.websockets.WebSocketConfiguration.ReceiveBufferSize">
+            <inheritdoc />
+        </member>
+        <member name="P:praxicloud.core.kestrel.middleware.websockets.WebSocketConfiguration.AllowedOrigins">
+            <inheritdoc />
+        </member>
+        <member name="P:praxicloud.core.kestrel.middleware.websockets.WebSocketConfiguration.WebSocketPath">
+            <inheritdoc />
+        </member>
+        <member name="P:praxicloud.core.kestrel.middleware.websockets.WebSocketConfiguration.SessionTimeout">
+            <inheritdoc />
+        </member>
+        <member name="T:praxicloud.core.kestrel.middleware.websockets.WebSocketHandler">
+            <summary>
+            A basic web socket session handler
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.middleware.websockets.WebSocketHandler._socket">
+            <summary>
+            The web socket that is in use
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.middleware.websockets.WebSocketHandler._serviceSessionGauge">
+            <summary>
+            A metrics gauge that tracks session data
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.middleware.websockets.WebSocketHandler._sessionTimes">
+            <summary>
+            A metric that tracks the time 
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.middleware.websockets.WebSocketHandler._receiveTimes">
+            <summary>
+            Tracks the time taken to receive a message
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.middleware.websockets.WebSocketHandler._errorCounter">
+            <summary>
+            The number of errors that have occurred
+            </summary>
+        </member>
+        <member name="M:praxicloud.core.kestrel.middleware.websockets.WebSocketHandler.#ctor(praxicloud.core.configuration.IDependencyService,praxicloud.core.kestrel.middleware.websockets.IWebSocketConfiguration,praxicloud.core.metrics.IMetricFactory,Microsoft.Extensions.Logging.ILoggerFactory,praxicloud.core.buffers.IBufferPool)">
+            <summary>
+            Initializes a new instance of the type
+            </summary>
+            <param name="dependencyService">A service that can be used to retrieve dependencies that were injected</param>
+            <param name="loggerFactory">A factory that can be used to create loggers</param>
+            <param name="metricFactory">A factory that can be used to create metrics</param>
+            <param name="webSocketConfiguration">The configuration of the web socket</param>  
+            <param name="bufferPool">The buffer pool used to retreive arrays</param>
+        </member>
+        <member name="P:praxicloud.core.kestrel.middleware.websockets.WebSocketHandler.BufferPool">
+            <summary>
+            The buffer pool to be used for allocations
+            </summary>
+        </member>
+        <member name="P:praxicloud.core.kestrel.middleware.websockets.WebSocketHandler.SessionId">
+            <summary>
+            A unique session id for correlation in tracing and metrics
+            </summary>
+        </member>
+        <member name="P:praxicloud.core.kestrel.middleware.websockets.WebSocketHandler.SocketState">
+            <summary>
+            The current status of the web socket
+            </summary>
+        </member>
+        <member name="P:praxicloud.core.kestrel.middleware.websockets.WebSocketHandler.MetricFactory">
+            <summary>
+            The metric factory used to create counters with
+            </summary>
+        </member>
+        <member name="P:praxicloud.core.kestrel.middleware.websockets.WebSocketHandler.WebSocketConfiguration">
+            <summary>
+            Web socket configuration details
+            </summary>
+        </member>
+        <member name="P:praxicloud.core.kestrel.middleware.websockets.WebSocketHandler.Logger">
+            <summary>
+            A logger that can be used to write debugging and diagnostics information
+            </summary>
+        </member>
+        <member name="P:praxicloud.core.kestrel.middleware.websockets.WebSocketHandler.DependencyService">
+            <summary>
+            A service used to get dependencies
+            </summary>
+        </member>
+        <member name="P:praxicloud.core.kestrel.middleware.websockets.WebSocketHandler.LastActivityTime">
+            <summary>
+            The last time a send or receive was successfully performed for session timing detection
+            </summary>
+        </member>
+        <member name="M:praxicloud.core.kestrel.middleware.websockets.WebSocketHandler.ProcessAsync(System.Net.WebSockets.WebSocket,System.Threading.CancellationToken)">
+            <summary>
+            Processes the web socket session
+            </summary>
+            <param name="socket">The web socket that is in use</param>
+            <param name="cancellationToken">A token to monitor for abort requests</param>
+        </member>
+        <member name="M:praxicloud.core.kestrel.middleware.websockets.WebSocketHandler.ReceiveMessagesAsync(System.Net.WebSockets.WebSocket,System.Threading.CancellationToken)">
+            <summary>
+            Receive loop for getting messages
+            </summary>
+            <param name="socket">The web socket that is associated with the session</param>
+            <param name="cancellationToken">A token to monitor for abort requests</param>
+        </member>
+        <member name="M:praxicloud.core.kestrel.middleware.websockets.WebSocketHandler.MessageReceivedAsync(System.Byte[],System.Threading.CancellationToken)">
+            <summary>
+            A method that is invoked when a new message is received
+            </summary>
+            <param name="message">The message that was received</param>
+            <param name="cancellationToken">A token to monitor for abort requests</param>
+        </member>
+        <member name="M:praxicloud.core.kestrel.middleware.websockets.WebSocketHandler.IterationAsync(System.Threading.CancellationToken)">
+            <summary>
+            A method that is executed on each iteraction while waiting the web socket session is alive
+            </summary>
+            <param name="cancellationToken">A token to monitor for abort requests</param>
+        </member>
+        <member name="M:praxicloud.core.kestrel.middleware.websockets.WebSocketHandler.SendMessageAsync(System.Byte[],System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            Sends a message using the web socket
+            </summary>
+            <param name="message">The message to send</param>
+            <param name="isBinary">True if the message is binary, false if text</param>
+            <param name="cancellationToken">A token to monitor for abort requests</param>
+        </member>
+        <member name="T:praxicloud.core.kestrel.probes.AvailabilityProbeLogic">
+            <summary>
+            An availability probe handler
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.probes.AvailabilityProbeLogic.AvailabilityEndpoint">
+            <summary>
+            The availability endpoint
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.probes.AvailabilityProbeLogic.AvailabilityIndex">
+            <summary>
+            The index of the availability endpoint
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.probes.AvailabilityProbeLogic.EndpointList">
+            <summary>
+            The endpoints that the probe listens on
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.probes.AvailabilityProbeLogic._availabilityLogic">
+            <summary>
+            The logic to confirm availability
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.probes.AvailabilityProbeLogic._logger">
+            <summary>
+            The logger to write debugging and diagnostics information to
+            </summary>
+        </member>
+        <member name="M:praxicloud.core.kestrel.probes.AvailabilityProbeLogic.#ctor(Microsoft.Extensions.Logging.ILoggerFactory,praxicloud.core.containers.IAvailabilityCheck)">
+            <summary>
+            Initializes a new instance of the type
+            </summary>
+            <param name="loggerFactory">Factory to create loggers</param>
+            <param name="availabilityCheck">Logic to perform availability checks</param>
+        </member>
+        <member name="P:praxicloud.core.kestrel.probes.AvailabilityProbeLogic.Name">
+            <inheritdoc />
+        </member>
+        <member name="M:praxicloud.core.kestrel.probes.AvailabilityProbeLogic.UnknownEndpointAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:praxicloud.core.kestrel.probes.AvailabilityProbeLogic.ValidateAsync(System.Int32,System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="T:praxicloud.core.kestrel.probes.HealthProbeLogic">
+            <summary>
+            A health probe handler
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.probes.HealthProbeLogic.HealthEndpoint">
+            <summary>
+            The health endpoint
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.probes.HealthProbeLogic.HealthIndex">
+            <summary>
+            The index of the health endpoint
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.probes.HealthProbeLogic.EndpointList">
+            <summary>
+            The endpoints that the probe listens on
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.probes.HealthProbeLogic._healthLogic">
+            <summary>
+            The logic to confirm health
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.probes.HealthProbeLogic._logger">
+            <summary>
+            The logger to write debugging and diagnostics information to
+            </summary>
+        </member>
+        <member name="M:praxicloud.core.kestrel.probes.HealthProbeLogic.#ctor(Microsoft.Extensions.Logging.ILoggerFactory,praxicloud.core.containers.IHealthCheck)">
+            <summary>
+            Initializes a new instance of the type
+            </summary>
+            <param name="loggerFactory">Factory to create loggers</param>
+            <param name="healthCheck">Logic to perform health checks</param>
+        </member>
+        <member name="P:praxicloud.core.kestrel.probes.HealthProbeLogic.Name">
+            <inheritdoc />
+        </member>
+        <member name="M:praxicloud.core.kestrel.probes.HealthProbeLogic.UnknownEndpointAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:praxicloud.core.kestrel.probes.HealthProbeLogic.ValidateAsync(System.Int32,System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="T:praxicloud.core.kestrel.probes.IKestrelHostConfiguration">
+            <summary>
+            A basic configuration for a Kestrel server
+            </summary>
+        </member>
+        <member name="P:praxicloud.core.kestrel.probes.IKestrelHostConfiguration.Address">
+            <summary>
+            The address to listen for requests on
+            </summary>
+        </member>
+        <member name="P:praxicloud.core.kestrel.probes.IKestrelHostConfiguration.Port">
+            <summary>
+            The port to listen for requests on
+            </summary>
+        </member>
+        <member name="P:praxicloud.core.kestrel.probes.IKestrelHostConfiguration.Certificate">
+            <summary>
+            If not null HTTPS will be used on the specified port
+            </summary>
+        </member>
+        <member name="P:praxicloud.core.kestrel.probes.IKestrelHostConfiguration.UseNagle">
+            <summary>
+            True if the NAGLE algorithm should be used, or false for no delay
+            </summary>
+        </member>
+        <member name="P:praxicloud.core.kestrel.probes.IKestrelHostConfiguration.KeepAlive">
+            <summary>
+            The keep alive duration
+            </summary>
+        </member>
+        <member name="P:praxicloud.core.kestrel.probes.IKestrelHostConfiguration.MaximumConcurrentConnections">
+            <summary>
+            The maximum concurrent connections allowed
+            </summary>
+        </member>
+        <member name="P:praxicloud.core.kestrel.probes.IKestrelHostConfiguration.AllowedProtocols">
+            <summary>
+            The allowed SSL security protocols or none for TLS
+            </summary>
+        </member>
+        <member name="T:praxicloud.core.kestrel.probes.IMultiProbeConfiguration">
+            <summary>
+            Probe configuration
+            </summary>
+        </member>
+        <member name="P:praxicloud.core.kestrel.probes.IMultiProbeConfiguration.EndpointList">
+            <summary>
+            The endpoints that the probe listens on and the associated index for reference
+            </summary>
+        </member>
+        <member name="T:praxicloud.core.kestrel.probes.IMultiProbeValidator">
+            <summary>
+            The interface of a probe validation instance
+            </summary>
+        </member>
+        <member name="P:praxicloud.core.kestrel.probes.IMultiProbeValidator.Name">
+            <summary>
+            The name of the probe for diagnostics and logging
+            </summary>
+        </member>
+        <member name="M:praxicloud.core.kestrel.probes.IMultiProbeValidator.ValidateAsync(System.Int32,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Validates whether the state of the probe should return true or false
+            </summary>
+            <param name="indexValue">The index of the endpoint that was triggered</param>
+            <param name="endpoint">The endpoint string that was triggered</param>
+            <param name="cancellationToken">A token that can be monitored for abort requests</param>
+            <returns>True if validation resulted in a success</returns>
+        </member>
+        <member name="M:praxicloud.core.kestrel.probes.IMultiProbeValidator.UnknownEndpointAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Identifies an endpoint that was called and did not match any of the known probe endpoints
+            </summary>
+            <param name="endpoint">The endpoint that was called</param>
+            <param name="cancellationToken">A token that can be monitored for abort requests</param>
+            <returns>True to continue to the next middleware component if it exists, false to return a failure</returns>
+        </member>
+        <member name="T:praxicloud.core.kestrel.probes.KestrelHostConfiguration">
+            <summary>
+            A basic configuration for a Kestrel server
+            </summary>
+        </member>
+        <member name="P:praxicloud.core.kestrel.probes.KestrelHostConfiguration.Address">
+            <summary>
+            The address to listen for requests on
+            </summary>
+        </member>
+        <member name="P:praxicloud.core.kestrel.probes.KestrelHostConfiguration.Port">
+            <summary>
+            The port to listen for requests on
+            </summary>
+        </member>
+        <member name="P:praxicloud.core.kestrel.probes.KestrelHostConfiguration.Certificate">
+            <summary>
+            If not null HTTPS will be used on the specified port
+            </summary>
+        </member>
+        <member name="P:praxicloud.core.kestrel.probes.KestrelHostConfiguration.UseNagle">
+            <summary>
+            True if the NAGLE algorithm should be used, or false for no delay
+            </summary>
+        </member>
+        <member name="P:praxicloud.core.kestrel.probes.KestrelHostConfiguration.KeepAlive">
+            <summary>
+            The keep alive duration
+            </summary>
+        </member>
+        <member name="P:praxicloud.core.kestrel.probes.KestrelHostConfiguration.MaximumConcurrentConnections">
+            <summary>
+            The maximum concurrent connections allowed
+            </summary>
+        </member>
+        <member name="P:praxicloud.core.kestrel.probes.KestrelHostConfiguration.AllowedProtocols">
+            <inheritdoc />
+        </member>
+        <member name="T:praxicloud.core.kestrel.probes.MultiProbe">
+            <summary>
+            A probe that handles multiple endpoints
+            </summary>
+        </member>
+        <member name="M:praxicloud.core.kestrel.probes.MultiProbe.#ctor(praxicloud.core.kestrel.probes.IKestrelHostConfiguration,Microsoft.Extensions.Logging.ILoggerFactory,praxicloud.core.kestrel.probes.IMultiProbeConfiguration,praxicloud.core.kestrel.probes.IMultiProbeValidator)">
+            <summary>
+            Initializes a new instance of the type
+            </summary>
+            <param name="kestrelConfiguration">The kestrel configuration details</param>
+            <param name="loggerFactory">A factory to create loggers from</param>
+            <param name="probeConfiguration">The probe configuration</param>
+            <param name="validator">The validation routine</param>
+        </member>
+        <member name="T:praxicloud.core.kestrel.probes.MultiProbeConfiguration">
+            <summary>
+            Configuration details for the probe endpoints
+            </summary>
+        </member>
+        <member name="P:praxicloud.core.kestrel.probes.MultiProbeConfiguration.EndpointList">
+            <summary>
+            The list of endpoints prefixed with / and the integer used to represent the index in handlers
+            </summary>
+        </member>
+        <member name="T:praxicloud.core.kestrel.probes.MultiProbeMiddleware">
+            <summary>
+            Middleware that performs basic probe logic
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.probes.MultiProbeMiddleware.JsonContentType">
+            <summary>
+            The JSON content type
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.probes.MultiProbeMiddleware.JsonSuccessResponse">
+            <summary>
+            JSON success payload for probes
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.probes.MultiProbeMiddleware.JsonFailureResponse">
+            <summary>
+            JSON failure payload for probes
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.probes.MultiProbeMiddleware._next">
+            <summary>
+            The next module to call
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.probes.MultiProbeMiddleware._configuration">
+            <summary>
+            The configuration object
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.probes.MultiProbeMiddleware._loggerFactory">
+            <summary>
+            Factory to create loggers
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.probes.MultiProbeMiddleware._logger">
+            <summary>
+            A logger to write debugging and diagnostics messages
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.probes.MultiProbeMiddleware._validator">
+            <summary>
+            Logic used to check probe response
+            </summary>
+        </member>
+        <member name="M:praxicloud.core.kestrel.probes.MultiProbeMiddleware.#ctor(Microsoft.AspNetCore.Http.RequestDelegate,praxicloud.core.kestrel.probes.IMultiProbeConfiguration,Microsoft.Extensions.Logging.ILoggerFactory,praxicloud.core.kestrel.probes.IMultiProbeValidator)">
+            <summary>
+            Initializes a new instance of the type
+            </summary>
+            <param name="next">The next module to pass the context to</param>
+            <param name="loggerFactory">A factory that can be used to create loggers</param>
+            <param name="validator">Logic that is used to validate probe requests</param>
+            <param name="configuration">Configuration that specifies the operation and endpoints for multy logic probes</param>
+        </member>
+        <member name="M:praxicloud.core.kestrel.probes.MultiProbeMiddleware.Invoke(Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            Processes the HTTP requests
+            </summary>
+            <param name="context">The HTTP Context associated with the request</param>
+        </member>
+        <member name="T:praxicloud.core.kestrel.probes.MultiProbeMiddlewareExtensions">
+            <summary>
+            An extension class used to make use of the Web Socket Middleware component easier
+            </summary>
+        </member>
+        <member name="M:praxicloud.core.kestrel.probes.MultiProbeMiddlewareExtensions.UseMultiProbe(Microsoft.AspNetCore.Builder.IApplicationBuilder,praxicloud.core.kestrel.probes.IMultiProbeConfiguration,Microsoft.Extensions.Logging.ILoggerFactory,praxicloud.core.kestrel.probes.IMultiProbeValidator)">
+            <summary>
+            Adds the probe middleware
+            </summary>
+            <param name="app">The application builder to add the middleware to</param>
+            <param name="configuration">Probe configuration</param>
+            <param name="loggerFactory">A factory to create loggers from</param>
+            <param name="validator">Validation logic for the probes</param>
+            <returns>The builder to enable pipelining</returns>
+        </member>
+        <member name="T:praxicloud.core.kestrel.probes.MultiProbeStartup">
+            <summary>
+            Startup type for multiprobe instances
+            </summary>
+        </member>
+        <member name="T:praxicloud.core.kestrel.probes.MultiProbeStartup.CheckAsync">
+            <summary>
+            A siganture of the method that performs the validation check
+            </summary>
+            <param name="indexValue">The index of the endpoint</param>
+            <param name="endpoint">The endpoint string</param>
+            <param name="cancellation">A token that can be monitored for abort requests</param>
+            <returns>True if success should be returned</returns>
+        </member>
+        <member name="F:praxicloud.core.kestrel.probes.MultiProbeStartup._configuration">
+            <summary>
+            The configuration of the probe
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.probes.MultiProbeStartup._validator">
+            <summary>
+            The validation instance
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.probes.MultiProbeStartup._loggerFactory">
+            <summary>
+            A factory used to create loggers from
+            </summary>
+        </member>
+        <member name="M:praxicloud.core.kestrel.probes.MultiProbeStartup.#ctor(praxicloud.core.kestrel.probes.IMultiProbeConfiguration,Microsoft.Extensions.Logging.ILoggerFactory,praxicloud.core.kestrel.probes.IMultiProbeValidator)">
+            <summary>
+            Initializes a new instance of the type
+            </summary>
+            <param name="configuration">The configuration of the probe</param>
+            <param name="loggerFactory">A factory used to create loggers from</param>
+            <param name="validator">The validation instance</param>
+        </member>
+        <member name="M:praxicloud.core.kestrel.probes.MultiProbeStartup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IHostingEnvironment)">
+            <inheritdoc />
+        </member>
+        <member name="T:praxicloud.core.kestrel.DualProbeLogic">
+            <summary>
+            A dual probe that handles both health and availability requests
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.DualProbeLogic.AvailabilityEndpoint">
+            <summary>
+            The availability endpoint
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.DualProbeLogic.HealthEndpoint">
+            <summary>
+            The health endpoint
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.DualProbeLogic.AvailabilityIndex">
+            <summary>
+            The index of the availability endpoint
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.DualProbeLogic.HealthIndex">
+            <summary>
+            The index of the health endpoint
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.DualProbeLogic.EndpointList">
+            <summary>
+            The endpoints that the probe listens on
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.DualProbeLogic._availabilityLogic">
+            <summary>
+            The logic to confirm availability
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.DualProbeLogic._healthLogic">
+            <summary>
+            The logic to confirm health
+            </summary>
+        </member>
+        <member name="F:praxicloud.core.kestrel.DualProbeLogic._logger">
+            <summary>
+            The logger to write debugging and diagnostics information to
+            </summary>
+        </member>
+        <member name="M:praxicloud.core.kestrel.DualProbeLogic.#ctor(Microsoft.Extensions.Logging.ILoggerFactory,praxicloud.core.containers.IAvailabilityCheck,praxicloud.core.containers.IHealthCheck)">
+            <summary>
+            Initializes a new instance of the type
+            </summary>
+            <param name="loggerFactory">Factory to create loggers</param>
+            <param name="availabilityCheck">Logic to perform availability checks</param>
+            <param name="healthCheck">Logic to perform health checks</param>
+        </member>
+        <member name="P:praxicloud.core.kestrel.DualProbeLogic.Name">
+            <inheritdoc />
+        </member>
+        <member name="M:praxicloud.core.kestrel.DualProbeLogic.UnknownEndpointAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:praxicloud.core.kestrel.DualProbeLogic.ValidateAsync(System.Int32,System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>
