@@ -54,16 +54,6 @@ namespace praxicloud.core.kestrel.middleware.authentication
         private readonly ISummary _authenticationTiming;
 
         /// <summary>
-        /// Web socket configuration
-        /// </summary>
-        private readonly IWebSocketConfiguration _configuration;
-
-        /// <summary>
-        /// The configuration values for the web socket operations
-        /// </summary>
-        private readonly IWebSocketConfiguration _webSocketConfiguration;
-
-        /// <summary>
         /// The logger to write debugging and diagnostics information to
         /// </summary>
         private readonly ILogger _logger;
@@ -123,6 +113,9 @@ namespace praxicloud.core.kestrel.middleware.authentication
         /// </summary>
         private readonly string _authorizationPolicyHeaderName;
 
+        /// <summary>
+        /// The HTTP endpoint that exposes authentication logic
+        /// </summary>
         private readonly string _authenticationPath;
         #endregion
         #region Constructors
@@ -135,21 +128,17 @@ namespace praxicloud.core.kestrel.middleware.authentication
         /// <param name="dependencyService">A service that can be used to retrieve dependencies that were injected</param>
         /// <param name="loggerFactory">A factory that can be used to create loggers</param>
         /// <param name="metricFactory">A factory that can be used to create metrics</param>
-        /// <param name="policyName">The name of the policy</param>
         /// <param name="resourceUriHeaderName">The name of the header that stores the resource URL</param>
         /// <param name="sasSigningKey">A Shared Access Signature signing key</param>
         /// <param name="sasTokenPolicyName">A Shared Access Signature token policy name</param>
         /// <param name="sasTokenTimeout">The Shared Access Signature token timeout</param>
-        /// <param name="webSocketConfiguration">The configuration of the web socket</param>   
         /// <param name="next">The next middleware component to execute</param>
-        public SasAuthenticationMiddleware(RequestDelegate next, IDependencyService dependencyService, IMetricFactory metricFactory, ILoggerFactory loggerFactory, IWebSocketConfiguration webSocketConfiguration, TimeSpan? sasTokenTimeout, string sasTokenPolicyName, string policyName, string sasSigningKey, string authenticationPath, string authorizationHeaderName = "Authorization", string resourceUriHeaderName = "AuthResourceUri", string authorizationPolicyHeaderName = "AuthPolicyName")
+        public SasAuthenticationMiddleware(RequestDelegate next, IDependencyService dependencyService, IMetricFactory metricFactory, ILoggerFactory loggerFactory, TimeSpan? sasTokenTimeout, string sasTokenPolicyName, string sasSigningKey, string authenticationPath, string authorizationHeaderName = "Authorization", string resourceUriHeaderName = "AuthResourceUri", string authorizationPolicyHeaderName = "AuthPolicyName")
         {
             Guard.NotNull(nameof(metricFactory), metricFactory);
             Guard.NotNull(nameof(loggerFactory), loggerFactory);
             Guard.NotNull(nameof(dependencyService), dependencyService);
-            Guard.NotNull(nameof(webSocketConfiguration), webSocketConfiguration);
             Guard.NotNullOrWhitespace(nameof(sasTokenPolicyName), sasTokenPolicyName);
-            Guard.NotNullOrWhitespace(nameof(policyName), policyName);
             Guard.NotNullOrWhitespace(nameof(sasSigningKey), sasSigningKey);
             Guard.NotNullOrWhitespace(nameof(authorizationHeaderName), authorizationHeaderName);
             Guard.NotNullOrWhitespace(nameof(resourceUriHeaderName), resourceUriHeaderName);
@@ -164,7 +153,6 @@ namespace praxicloud.core.kestrel.middleware.authentication
 
                 _next = next;
 
-                _webSocketConfiguration = webSocketConfiguration;
                 _sasTokenTimeout = sasTokenTimeout ?? TimeSpan.FromHours(1);
                 _sasTokenPolicyName = sasTokenPolicyName;
                 _sasTokenScheme = sasTokenPolicyName;
@@ -173,8 +161,6 @@ namespace praxicloud.core.kestrel.middleware.authentication
                 _resourceUriHeaderName = resourceUriHeaderName;
                 _authorizationPolicyHeaderName = authorizationPolicyHeaderName;
                 _authenticationPath = authenticationPath;
-
-                _configuration = webSocketConfiguration; // dependencyService.Services.GetRequiredService<WebSocketConfiguration>();
 
                 _authenticationTiming = metricFactory.CreateSummary("sas-timing", "Timing summary for authentication timing", 10, false, new string[0]);
                 _authenticationSuccess = metricFactory.CreateSummary("sas-authentication-success", "Successful authorization count", 10, false, new string[0]);
@@ -195,9 +181,9 @@ namespace praxicloud.core.kestrel.middleware.authentication
 
             using (_logger.BeginScope("Validate Token"))
             {
-                if (context.Request.Headers.ContainsKey("Authorization"))
+                if (context.Request.Headers.ContainsKey(_authorizationHeaderName))
                 {
-                    var accessToken = context.Request.Headers["Authorization"][0];
+                    var accessToken = context.Request.Headers[_authorizationHeaderName][0];
 
                     if (accessToken.StartsWith("Bearer "))
                     {

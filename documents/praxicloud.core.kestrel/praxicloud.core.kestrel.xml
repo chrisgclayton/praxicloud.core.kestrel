@@ -243,16 +243,6 @@
             A summary metric to record authentication timing
             </summary>
         </member>
-        <member name="F:praxicloud.core.kestrel.middleware.authentication.SasAuthenticationMiddleware._configuration">
-            <summary>
-            Web socket configuration
-            </summary>
-        </member>
-        <member name="F:praxicloud.core.kestrel.middleware.authentication.SasAuthenticationMiddleware._webSocketConfiguration">
-            <summary>
-            The configuration values for the web socket operations
-            </summary>
-        </member>
         <member name="F:praxicloud.core.kestrel.middleware.authentication.SasAuthenticationMiddleware._logger">
             <summary>
             The logger to write debugging and diagnostics information to
@@ -313,7 +303,12 @@
             The HTTP header that contains the policy header
             </summary>
         </member>
-        <member name="M:praxicloud.core.kestrel.middleware.authentication.SasAuthenticationMiddleware.#ctor(Microsoft.AspNetCore.Http.RequestDelegate,praxicloud.core.configuration.IDependencyService,praxicloud.core.metrics.IMetricFactory,Microsoft.Extensions.Logging.ILoggerFactory,praxicloud.core.kestrel.middleware.websockets.IWebSocketConfiguration,System.Nullable{System.TimeSpan},System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+        <member name="F:praxicloud.core.kestrel.middleware.authentication.SasAuthenticationMiddleware._authenticationPath">
+            <summary>
+            The HTTP endpoint that exposes authentication logic
+            </summary>
+        </member>
+        <member name="M:praxicloud.core.kestrel.middleware.authentication.SasAuthenticationMiddleware.#ctor(Microsoft.AspNetCore.Http.RequestDelegate,praxicloud.core.configuration.IDependencyService,praxicloud.core.metrics.IMetricFactory,Microsoft.Extensions.Logging.ILoggerFactory,System.Nullable{System.TimeSpan},System.String,System.String,System.String,System.String,System.String,System.String)">
             <summary>
             Initializes a new instance of the type
             </summary>
@@ -323,12 +318,10 @@
             <param name="dependencyService">A service that can be used to retrieve dependencies that were injected</param>
             <param name="loggerFactory">A factory that can be used to create loggers</param>
             <param name="metricFactory">A factory that can be used to create metrics</param>
-            <param name="policyName">The name of the policy</param>
             <param name="resourceUriHeaderName">The name of the header that stores the resource URL</param>
             <param name="sasSigningKey">A Shared Access Signature signing key</param>
             <param name="sasTokenPolicyName">A Shared Access Signature token policy name</param>
             <param name="sasTokenTimeout">The Shared Access Signature token timeout</param>
-            <param name="webSocketConfiguration">The configuration of the web socket</param>   
             <param name="next">The next middleware component to execute</param>
         </member>
         <member name="M:praxicloud.core.kestrel.middleware.authentication.SasAuthenticationMiddleware.ValidateTokenAsync(Microsoft.AspNetCore.Http.HttpContext)">
