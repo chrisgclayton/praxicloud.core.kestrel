@@ -207,13 +207,14 @@ namespace praxicloud.core.kestrel
                         if (_configuration.Certificate != null) listenOptions.UseHttps(new HttpsConnectionAdapterOptions { SslProtocols = _configuration.AllowedProtocols ?? SslProtocols.Tls, ServerCertificate = _configuration.Certificate });
 
                         ConfigureKestrelListenOptions(listenOptions);
-                    });                    
-                })
-                .ConfigureKestrel(serverOptions =>
-                {
-                    serverOptions.Limits.MaxConcurrentConnections = _configuration.MaximumConcurrentConnections;
-                    serverOptions.Limits.KeepAliveTimeout = _configuration.KeepAlive;
+                    });
                 });
+
+                //.ConfigureKestrel(serverOptions =>
+                //{
+                //    serverOptions.Limits.MaxConcurrentConnections = _configuration.MaximumConcurrentConnections;
+                //    serverOptions.Limits.KeepAliveTimeout = _configuration.KeepAlive;
+                //});
 
             return webHost;
         }
