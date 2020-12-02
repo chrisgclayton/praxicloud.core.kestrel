@@ -10,7 +10,7 @@ namespace praxicloud.core.kestrel.middleware.authentication
     /// <summary>
     /// A response object from authentication requests
     /// </summary>
-    public sealed class AuthenticationResponsePayload
+    public class AuthenticationResponsePayload
     {
         /// <summary>
         /// The access token

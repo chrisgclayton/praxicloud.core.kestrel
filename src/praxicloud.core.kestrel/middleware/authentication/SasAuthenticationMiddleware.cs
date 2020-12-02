@@ -303,7 +303,7 @@ namespace praxicloud.core.kestrel.middleware.authentication
         /// <param name="request">The request</param>
         /// <param name="cancellationToken">A token to monitor for abort requests</param>
         /// <returns>The authentication response</returns>
-        private async Task<AuthenticationResponsePayload> AuthenticateClientAsync(HttpRequest request, CancellationToken cancellationToken)
+        protected virtual async Task<AuthenticationResponsePayload> AuthenticateClientAsync(HttpRequest request, CancellationToken cancellationToken)
         {
             AuthenticationResponsePayload response = null;
 
@@ -320,7 +320,7 @@ namespace praxicloud.core.kestrel.middleware.authentication
                         response = new AuthenticationResponsePayload
                         {
                             TokenType = "bearer",
-                            AccessToken = accessToken
+                            AccessToken = accessToken  
                         };
                     }
                 }
