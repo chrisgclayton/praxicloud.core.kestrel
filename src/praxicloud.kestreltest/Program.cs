@@ -59,6 +59,7 @@ namespace praxicloud.kestreltest
         private static async Task MainAsync()
         {
             var messageHandler = new HttpClientHandler();
+            messageHandler.SslProtocols = System.Security.Authentication.SslProtocols.Tls12;
             messageHandler.ServerCertificateCustomValidationCallback += (httpRequest, certificate, chain, policyErrors) => true;
 
             var client = new HttpClient(messageHandler);
@@ -71,13 +72,18 @@ namespace praxicloud.kestreltest
 
                 try
                 {
-                    var response = client.GetAsync($"{HostAddress}:{ Port }{ DualProbeLogic.AvailabilityEndpoint }").GetAwaiter().GetResult();
+                    var response = await client.GetAsync($"{HostAddress}:{ Port }{ DualProbeLogic.AvailabilityEndpoint }").ConfigureAwait(false);
 
                     Console.WriteLine($"Response code was {response.StatusCode}");
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine($"Error was {e.Message}");
+
+                    while(e != null)
+                    {
+                        Console.WriteLine($"Error was {e.Message}");
+                        e = e.InnerException;
+                    }
                 }
             } while (!string.Equals(line, "quit", StringComparison.OrdinalIgnoreCase));
 

@@ -18,6 +18,7 @@ namespace praxicloud.core.kestrel.tests
     using praxicloud.core.containers;
     using Microsoft.Extensions.DependencyInjection;
     using praxicloud.core.kestrel.probes;
+    using System.Security.Authentication;
     #endregion
 
     /// <summary>
@@ -156,6 +157,8 @@ namespace praxicloud.core.kestrel.tests
             var collector = new Thread(new ThreadStart(() =>
             {
                 var messageHandler = new HttpClientHandler();
+                messageHandler.SslProtocols = SslProtocols.Tls12;
+
                 messageHandler.ServerCertificateCustomValidationCallback += (httpRequest, certificate, chain, policyErrors) => true;
 
                 var client = new HttpClient(messageHandler);
@@ -232,6 +235,7 @@ namespace praxicloud.core.kestrel.tests
             var collector = new Thread(new ThreadStart(() =>
             {
                 var messageHandler = new HttpClientHandler();
+
                 messageHandler.ServerCertificateCustomValidationCallback += (httpRequest, certificate, chain, policyErrors) => true;
 
                 var client = new HttpClient(messageHandler);
