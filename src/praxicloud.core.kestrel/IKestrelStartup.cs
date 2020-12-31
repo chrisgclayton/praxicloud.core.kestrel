@@ -19,7 +19,7 @@ namespace praxicloud.core.kestrel
         /// </summary>
         /// <param name="app">Application Builder</param>
         /// <param name="env">Hosting Environment</param>
-        void Configure(IApplicationBuilder app, IHostingEnvironment env);
+        void Configure(IApplicationBuilder app, IWebHostEnvironment env);
         #endregion
     }
 }

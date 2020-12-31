@@ -63,7 +63,7 @@ namespace praxicloud.core.kestrel.probes
         #endregion
         #region Methods
         /// <inheritdoc />
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseMultiProbe(_configuration, _loggerFactory, _validator);
         }
