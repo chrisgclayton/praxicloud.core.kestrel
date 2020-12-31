@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "praxicloud.core.kestrel", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "praxicloud.core.kestrel.tests", "praxicloud.core.kestrel.tests\praxicloud.core.kestrel.tests.csproj", "{5902CED4-91B2-431A-82E9-186C2F9D243F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "praxicloud.kestreltest", "praxicloud.kestreltest\praxicloud.kestreltest.csproj", "{5A824F6E-2F7A-4326-93A1-6ADB1A983D67}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{5902CED4-91B2-431A-82E9-186C2F9D243F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5902CED4-91B2-431A-82E9-186C2F9D243F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5902CED4-91B2-431A-82E9-186C2F9D243F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A824F6E-2F7A-4326-93A1-6ADB1A983D67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A824F6E-2F7A-4326-93A1-6ADB1A983D67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A824F6E-2F7A-4326-93A1-6ADB1A983D67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A824F6E-2F7A-4326-93A1-6ADB1A983D67}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
