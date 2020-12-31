@@ -195,7 +195,7 @@ namespace praxicloud.core.kestrel.tests
             host.StopAsync(CancellationToken.None).GetAwaiter().GetResult();
             host.Task.GetAwaiter().GetResult();
 
-            Assert.IsTrue(availabilityResponses.Count(item => item) == 10, "Availability success count incorrect");
+            Assert.IsTrue(availabilityResponses.Count(item => item) == 10, $"Availability success count incorrect expected 10 but received {availabilityResponses.Count(item => item)}");
             Assert.IsTrue(availabilityResponses.Count(item => !item) == 0, "Availability failures count incorrect");
             Assert.IsTrue(invocationCounter.AvailabiltyCount == 10, "Availability invocation count correct");
         }
