@@ -201,10 +201,15 @@ namespace praxicloud.core.kestrel
                 .UseKestrel(options =>
                 {                    
                     options.Listen(_configuration.Address, _configuration.Port, listenOptions =>
-                    {
+                    {                        
                         listenOptions.KestrelServerOptions.Limits.MaxConcurrentConnections = _configuration.MaximumConcurrentConnections;
                         listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
-                        
+
+                        listenOptions.KestrelServerOptions.ConfigureEndpointDefaults(opt => 
+                        { 
+                            opt.Protocols = HttpProtocols.Http1AndHttp2;                                
+                        });
+
                   //      listenOptions.NoDelay = !_configuration.UseNagle;
                         if (_configuration.Certificate != null) listenOptions.UseHttps(new HttpsConnectionAdapterOptions 
                         { 
@@ -215,6 +220,7 @@ namespace praxicloud.core.kestrel
                     });
                 });
 
+            
                 //.ConfigureKestrel(serverOptions =>
                 //{
                 //    serverOptions.Limits.MaxConcurrentConnections = _configuration.MaximumConcurrentConnections;
